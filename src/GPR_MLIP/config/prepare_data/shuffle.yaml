@@ -1,0 +1,6 @@
+function:
+  _target_: GPR_MLIP.data.prepare_data
+  n_train: ${experiment.n_train}
+  n_test: 2000
+  remove_offset: true
+  seed: 42

@@ -1,0 +1,20 @@
+experiment_name: cross_validation
+dataset_name: null
+method_name: null
+result_name: null
+model_name: null
+
+model_path:
+  _target_: "GPR_MLIP.utils.get_model_path"
+  experiment_name: ${experiment.model_init.experiment_name}
+  result_dir: ${result_dir}
+  dataset_name: ${experiment.model_init.dataset_name}
+  method_name: ${experiment.model_init.method_name}
+  result_name: ${experiment.model_init.result_name}
+  model_name: ${experiment.model_init.model_name}
+
+function:
+  _target_: "GPR_MLIP.models.save_and_load.load_state_dict"
+  method: ${method.method}
+  fit_mode: fixed_hypers
+  state_dict_path: ${experiment.model_init.model_path}

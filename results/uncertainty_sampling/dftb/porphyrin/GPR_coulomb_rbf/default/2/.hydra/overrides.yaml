@@ -1,0 +1,11 @@
+- molecule=p-porphyrin
+- experiment=candidate_based_al
+- experiment.n_al=4801
+- experiment.uncertainty_function_name=random
+- experiment.function.likelihood=True
+- experiment/contexts=no_fast_pred
+- experiment.model_init.result_name=combinations3_1000
+- dataset.remove_offset=True
+- dataset.trajectory_length=100000
+- dataset.calculation_methods=[LC-DFTB]
+- result_name=combinations3_1000-likelihood-no_fast_pred

@@ -1,0 +1,8 @@
+defaults:
+  - general_hypers: combinations3
+
+params:
+  _target_: "experiments.cross_validation.get_diff_combination_hyper_inits"
+  likelihood_hyper_names: ${method.likelihood.hyper_names}
+  kernel_hyper_names: ${method.kernel.hyper_names}
+  general_hypers: ${experiment.model_init.hyper_inits.general_hypers}

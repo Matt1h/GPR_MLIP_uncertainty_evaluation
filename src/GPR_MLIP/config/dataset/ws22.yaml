@@ -1,0 +1,16 @@
+name: ws22
+molecule_name: sma
+
+npz_path: ../../../datasets/ws22/ws22_${dataset.molecule_name}.npz
+
+load_data_function:
+  _target_: GPR_MLIP.data.load_from_npz
+  npz_path: ${dataset.npz_path}
+  coordinates_key: ${dataset.coordinates_key}
+  energy_key: E
+  representation_fn: ${representation.function}
+  calc_representation: ${method.kernel.calc_representation}
+  unit: kcal/mol
+
+coordinates_key: R
+charges_key: Z

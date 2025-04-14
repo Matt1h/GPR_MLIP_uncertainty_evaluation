@@ -1,0 +1,6 @@
+- _target_: torch.no_grad
+- _target_: gpytorch.settings.max_cholesky_size
+  value: 1000000
+- _target_: gpytorch.settings.fast_pred_var
+- _target_: gpytorch.settings.debug
+  state: false

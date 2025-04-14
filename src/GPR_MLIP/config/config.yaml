@@ -1,0 +1,12 @@
+result_name: results_${now:%Y-%m-%d}_${now:%H-%M-%S}
+result_dir: ../../../experiments/${experiment.name}/${dataset.name}/${dataset.molecule_name}/${method.name}_${representation.name}_${method.kernel.name}/${result_name}
+
+defaults:
+  - _self_
+  - experiment: cross_validation
+  - dataset: rmd17
+  - prepare_data: shuffle
+  - method: gpr
+  - representation: coulomb
+  - hydra: default
+

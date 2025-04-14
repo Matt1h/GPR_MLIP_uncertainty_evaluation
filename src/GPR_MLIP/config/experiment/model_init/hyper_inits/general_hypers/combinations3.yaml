@@ -1,0 +1,11 @@
+noise: [ 10e-4, 10e-7, 10e-9 ]
+outputscale:
+  _target_: "experiments.cross_validation.get_log_scale"
+  lengthscale_log_start: 0
+  lengthscale_log_end: 2
+  n_lengthscales: 1
+lengthscale:
+  _target_: "experiments.cross_validation.get_log_scale"
+  lengthscale_log_start: 0
+  lengthscale_log_end: 1.5
+  n_lengthscales: 3

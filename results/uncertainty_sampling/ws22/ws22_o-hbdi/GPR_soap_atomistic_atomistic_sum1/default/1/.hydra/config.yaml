@@ -1,0 +1,123 @@
+result_name: combinations3_1000-likelihood-no_fast_pred
+result_dir: ../../experiments/${molecule}/${experiment.name}/${dataset.name}/${method.name}_${representation.name}_${method.kernel.name}/${result_name}
+molecule: o-hbdi
+experiment:
+  model_init:
+    experiment_name: cross_validation
+    dataset_name: null
+    method_name: null
+    result_name: combinations3_1000
+    model_name: null
+    model_path:
+      _target_: active.utils.config.method.gpr.get_model_path
+      experiment_name: ${experiment.model_init.experiment_name}
+      result_dir: ${result_dir}
+      dataset_name: ${experiment.model_init.dataset_name}
+      method_name: ${experiment.model_init.method_name}
+      result_name: ${experiment.model_init.result_name}
+      model_name: ${experiment.model_init.model_name}
+    function:
+      _target_: utils.config.method.gpr.load_state_dict
+      method: ${method.method}
+      fit_mode: fixed_hypers
+      state_dict_path: ${experiment.model_init.model_path}
+  contexts:
+  - _target_: torch.no_grad
+  - _target_: gpytorch.settings.max_cholesky_size
+    value: 1000000
+  - _target_: gpytorch.settings.debug
+    state: false
+  name: candidate_based_al
+  n_init: 200
+  n_test: 2000
+  n_al: 1000
+  n_new_samples: 1
+  uncertainty_function_name: bootstrap_aggregation
+  function:
+    _target_: experiments.candidate_based_al.run_candidate_based_al
+    method_name: ${method.name}
+    calculation_method: ${dataset.calculation_method}
+    n_init: ${experiment.n_init}
+    n_test: ${experiment.n_test}
+    model: ${experiment.model_init.function}
+    n_al: ${experiment.n_al}
+    n_new_samples: ${experiment.n_new_samples}
+    remove_offset: ${dataset.remove_offset}
+    uncertainty_function:
+      _target_: utils.config.experiment.candidate_based_al.name2uncertainty_function
+      method_name: ${method.name}
+      uncertainty_function_name: ${experiment.uncertainty_function_name}
+    likelihood: true
+    batch_size_uncertainty: 1000
+    contexts: ${experiment.contexts}
+dataset:
+  name: ${dataset.trajectory_type}_${dataset.trajectory_name}_${dataset.calculation_name}
+  trajectory_type: ws22
+  trajectory_name: full
+  calculation_methods:
+  - ws22_energies
+  calculation_name: ${attach:${dataset.calculation_methods}}
+  calculation_method:
+    _target_: utils.config.dataset.get_calculation_method
+    calculation_methods: ${dataset.calculation_methods}
+  trajectory_length: null
+  remove_offset: true
+  path: ../../test_quantum-chemistry-data/${molecule}/${dataset.trajectory_type}/geometries/${dataset.trajectory_name}.xyz
+  function:
+    _target_: molecule_data.trajectory.Trajectory
+    path: ${dataset.path}
+    calculation_methods: ${dataset.calculation_methods}
+    geometry_inds:
+      _target_: utils.config.dataset.inds_from_trajectory_length
+      trajectory_length: ${dataset.trajectory_length}
+    property_: gs_energy
+method:
+  likelihood:
+    likelihood:
+      _target_: gpytorch.likelihoods.GaussianLikelihood
+      noise_constraint:
+        _target_: gpytorch.constraints.GreaterThan
+        lower_bound: 1.0e-12
+    hyper_names:
+    - likelihood.noise_covar.noise
+  kernel:
+    name: atomistic_sum1
+    calc_representation: false
+    kernel:
+      _target_: active.models.gpr.kernel.AtomisticSumKernel1
+      atomistic_kernel:
+        _target_: active.utils.utils.str2class
+        class_path: gpytorch.kernels.RBFKernel
+      representation:
+        _target_: active.utils.utils.str2class
+        class_path: ${representation.function}
+      representation_kwargs: ${representation.kwargs}
+      bs: 50
+      ard_num_dims:
+        _target_: active.utils.config.method.gpr.get_ard_dim
+        path: ${dataset.path}
+        representation: ${representation.function}
+        representation_kwargs: ${representation.kwargs}
+    hyper_names:
+    - covar_module.outputscale
+    - covar_module.base_kernel.atomistic_kernel.lengthscale
+  name: GPR
+  method:
+    _target_: active.models.gpr.model.GaussianProcessRegression
+    likelihood: ${method.likelihood.likelihood}
+    kernel: ${method.kernel.kernel}
+    fit_mode: fixed_hypers
+    lr: 0.1
+    n_steps: 200
+    _partial_: true
+representation:
+  name: soap_atomistic
+  function: molecule_data.representations.soap.soap_atomistic
+  kwargs:
+    charges:
+      _target_: active.utils.config.representation.get_charges
+      xyz_path: ${dataset.path}
+    r_cut: 5.0
+    n_max: 3
+    l_max: 1
+    ignore_h: false

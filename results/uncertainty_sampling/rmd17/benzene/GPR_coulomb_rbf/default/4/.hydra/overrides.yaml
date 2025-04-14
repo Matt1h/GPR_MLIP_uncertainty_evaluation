@@ -1,0 +1,9 @@
+- experiment=candidate_based_al
+- experiment.n_al=5000
+- experiment.uncertainty_function_name=variance
+- dataset.remove_offset=True
+- dataset.trajectory_type=rmd17
+- dataset.trajectory_name=full
+- dataset.function.property_=gs_energies
+- dataset.calculation_methods=[rmd17_energy]
+- result_name=combinations3_1000

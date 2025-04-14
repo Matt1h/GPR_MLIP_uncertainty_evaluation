@@ -1,0 +1,313 @@
+hydra:
+  run:
+    dir: ${result_dir}
+  sweep:
+    dir: ${result_dir}
+    subdir: ${hydra.job.num}
+  launcher:
+    submitit_folder: ${hydra.sweep.dir}/.submitit/%j
+    timeout_min: 1800
+    cpus_per_task: null
+    gpus_per_node: null
+    tasks_per_node: 1
+    mem_gb: null
+    nodes: 1
+    name: ${hydra.job.name}
+    stderr_to_stdout: false
+    _target_: hydra_plugins.hydra_submitit_launcher.submitit_launcher.SlurmLauncher
+    partition: gpu
+    qos: null
+    comment: null
+    constraint: null
+    exclude: null
+    gres: gpu:1
+    cpus_per_gpu: null
+    gpus_per_task: null
+    mem_per_gpu: null
+    mem_per_cpu: null
+    account: imacm_gpu
+    signal_delay_s: 120
+    max_num_timeout: 0
+    additional_parameters: {}
+    array_parallelism: 256
+    setup:
+    - module load 2021a CUDA/11.4.2
+  sweeper:
+    _target_: hydra._internal.core_plugins.basic_sweeper.BasicSweeper
+    max_batch_size: null
+    params: null
+  help:
+    app_name: ${hydra.job.name}
+    header: '${hydra.help.app_name} is powered by Hydra.
+
+      '
+    footer: 'Powered by Hydra (https://hydra.cc)
+
+      Use --hydra-help to view Hydra specific help
+
+      '
+    template: '${hydra.help.header}
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (group=option)
+
+
+      $APP_CONFIG_GROUPS
+
+
+      == Config ==
+
+      Override anything in the config (foo.bar=value)
+
+
+      $CONFIG
+
+
+      ${hydra.help.footer}
+
+      '
+  hydra_help:
+    template: 'Hydra (${hydra.runtime.version})
+
+      See https://hydra.cc for more info.
+
+
+      == Flags ==
+
+      $FLAGS_HELP
+
+
+      == Configuration groups ==
+
+      Compose your configuration from those groups (For example, append hydra/job_logging=disabled
+      to command line)
+
+
+      $HYDRA_CONFIG_GROUPS
+
+
+      Use ''--cfg hydra'' to Show the Hydra config.
+
+      '
+    hydra_help: ???
+  hydra_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][HYDRA] %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+    root:
+      level: INFO
+      handlers:
+      - console
+    loggers:
+      logging_example:
+        level: DEBUG
+    disable_existing_loggers: false
+  job_logging:
+    version: 1
+    formatters:
+      simple:
+        format: '[%(asctime)s][%(name)s][%(levelname)s] - %(message)s'
+    handlers:
+      console:
+        class: logging.StreamHandler
+        formatter: simple
+        stream: ext://sys.stdout
+      file:
+        class: logging.FileHandler
+        formatter: simple
+        filename: ${hydra.runtime.output_dir}/${hydra.job.name}.log
+    root:
+      level: INFO
+      handlers:
+      - console
+      - file
+    disable_existing_loggers: false
+  env: {}
+  mode: MULTIRUN
+  searchpath: []
+  callbacks: {}
+  output_subdir: .hydra
+  overrides:
+    hydra:
+    - hydra/launcher=submitit_slurm
+    - hydra.mode=MULTIRUN
+    task:
+    - molecule=p-porphyrin
+    - experiment=candidate_based_al
+    - experiment.n_al=4801
+    - experiment.uncertainty_function_name=absolute_error,bootstrap_aggregation,random,two_sets,variance
+    - experiment.function.likelihood=true
+    - experiment/contexts=no_fast_pred
+    - experiment.model_init.result_name=combinations3_1000
+    - dataset.remove_offset=true
+    - dataset.trajectory_length=100000
+    - dataset.calculation_methods=[LC-DFTB]
+    - result_name=combinations3_1000-likelihood-no_fast_pred
+  job:
+    name: ${result_name}
+    chdir: null
+    override_dirname: dataset.calculation_methods=[LC-DFTB],dataset.remove_offset=true,dataset.trajectory_length=100000,experiment.function.likelihood=true,experiment.model_init.result_name=combinations3_1000,experiment.n_al=4801,experiment.uncertainty_function_name=absolute_error,bootstrap_aggregation,random,two_sets,variance,experiment/contexts=no_fast_pred,experiment=candidate_based_al,molecule=p-porphyrin,result_name=combinations3_1000-likelihood-no_fast_pred
+    id: ???
+    num: ???
+    config_name: config
+    env_set: {}
+    env_copy: []
+    config:
+      override_dirname:
+        kv_sep: '='
+        item_sep: ','
+        exclude_keys: []
+  runtime:
+    version: 1.3.2
+    version_base: '1.3'
+    cwd: /beegfs/holzenkamp/dev/active_learning/active
+    config_sources:
+    - path: hydra.conf
+      schema: pkg
+      provider: hydra
+    - path: /beegfs/holzenkamp/dev/active_learning/active/config
+      schema: file
+      provider: main
+    - path: hydra_plugins.hydra_colorlog.conf
+      schema: pkg
+      provider: hydra-colorlog
+    - path: ''
+      schema: structured
+      provider: schema
+    output_dir: ???
+    choices:
+      representation: coulomb
+      method: gpr
+      method/kernel: rbf
+      method/likelihood: gaussian
+      dataset: trajectory
+      experiment: candidate_based_al
+      experiment/contexts: no_fast_pred
+      experiment/model_init: load_state_dict
+      hydra/env: default
+      hydra/callbacks: null
+      hydra/job_logging: default
+      hydra/hydra_logging: default
+      hydra/hydra_help: default
+      hydra/help: default
+      hydra/sweeper: basic
+      hydra/launcher: submitit_slurm
+      hydra/output: default
+  verbose: false
+result_name: combinations3_1000-likelihood-no_fast_pred
+result_dir: ../../experiments/${molecule}/${experiment.name}/${dataset.name}/${method.name}_${representation.name}_${method.kernel.name}/${result_name}
+molecule: p-porphyrin
+experiment:
+  model_init:
+    experiment_name: cross_validation
+    dataset_name: null
+    method_name: null
+    result_name: combinations3_1000
+    model_name: null
+    model_path:
+      _target_: active.utils.config.method.gpr.get_model_path
+      experiment_name: ${experiment.model_init.experiment_name}
+      result_dir: ${result_dir}
+      dataset_name: ${experiment.model_init.dataset_name}
+      method_name: ${experiment.model_init.method_name}
+      result_name: ${experiment.model_init.result_name}
+      model_name: ${experiment.model_init.model_name}
+    function:
+      _target_: utils.config.method.gpr.load_state_dict
+      method: ${method.method}
+      fit_mode: fixed_hypers
+      state_dict_path: ${experiment.model_init.model_path}
+  contexts:
+  - _target_: torch.no_grad
+  - _target_: gpytorch.settings.max_cholesky_size
+    value: 1000000
+  - _target_: gpytorch.settings.debug
+    state: false
+  name: candidate_based_al
+  n_init: 200
+  n_test: 2000
+  n_al: 4801
+  n_new_samples: 1
+  uncertainty_function_name: variance
+  function:
+    _target_: experiments.candidate_based_al.run_candidate_based_al
+    method_name: ${method.name}
+    calculation_method: ${dataset.calculation_method}
+    n_init: ${experiment.n_init}
+    n_test: ${experiment.n_test}
+    model: ${experiment.model_init.function}
+    n_al: ${experiment.n_al}
+    n_new_samples: ${experiment.n_new_samples}
+    remove_offset: ${dataset.remove_offset}
+    uncertainty_function:
+      _target_: utils.config.experiment.candidate_based_al.name2uncertainty_function
+      method_name: ${method.name}
+      uncertainty_function_name: ${experiment.uncertainty_function_name}
+    likelihood: true
+    contexts: ${experiment.contexts}
+dataset:
+  name: ${dataset.trajectory_type}_${dataset.trajectory_name}_${dataset.calculation_name}
+  trajectory_type: dftb
+  trajectory_name: traj1
+  calculation_methods:
+  - LC-DFTB
+  calculation_name: ${attach:${dataset.calculation_methods}}
+  calculation_method:
+    _target_: utils.config.dataset.get_calculation_method
+    calculation_methods: ${dataset.calculation_methods}
+  trajectory_length: 100000
+  remove_offset: true
+  path: ../../test_quantum-chemistry-data/${molecule}/${dataset.trajectory_type}/geometries/${dataset.trajectory_name}.xyz
+  function:
+    _target_: molecule_data.trajectory.Trajectory
+    path: ${dataset.path}
+    calculation_methods: ${dataset.calculation_methods}
+    geometry_inds:
+      _target_: utils.config.dataset.inds_from_trajectory_length
+      trajectory_length: ${dataset.trajectory_length}
+    property_: es_energies
+method:
+  likelihood:
+    likelihood:
+      _target_: gpytorch.likelihoods.GaussianLikelihood
+      noise_constraint:
+        _target_: gpytorch.constraints.GreaterThan
+        lower_bound: 1.0e-12
+    hyper_names:
+    - likelihood.noise_covar.noise
+  kernel:
+    name: rbf
+    calc_representation: true
+    kernel:
+      _target_: gpytorch.kernels.RBFKernel
+      ard_num_dims:
+        _target_: active.utils.config.method.gpr.get_ard_dim
+        path: ${dataset.path}
+        representation: ${representation.function}
+        representation_kwargs: ${representation.kwargs}
+    hyper_names:
+    - covar_module.outputscale
+    - covar_module.base_kernel.lengthscale
+  name: GPR
+  method:
+    _target_: active.models.gpr.model.GaussianProcessRegression
+    likelihood: ${method.likelihood.likelihood}
+    kernel: ${method.kernel.kernel}
+    fit_mode: fixed_hypers
+    lr: 0.1
+    n_steps: 200
+    _partial_: true
+representation:
+  name: coulomb
+  function: molecule_data.representations.coulomb.coulomb
+  kwargs:
+    charges:
+      _target_: active.utils.config.representation.get_charges
+      xyz_path: ${dataset.path}

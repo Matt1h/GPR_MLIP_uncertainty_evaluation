@@ -1,0 +1,22 @@
+name: uncertainty_sampling
+
+defaults:
+  - model_init: load_state_dict
+  - contexts: no_fast_pred
+
+n_train: 200
+n_al_iter: 1000
+uncertainty: variance
+
+function:
+  _target_: experiments.uncertainty_sampling.run_uncertainty_sampling
+  model: ${experiment.model_init.function}
+  n_init: ${experiment.n_train}
+  n_al_iter: ${experiment.n_al_iter}
+  uncertainty_function:
+    _target_: experiments.uncertainty_sampling.name2uncertainty_function
+    method_name: ${method.name}
+    uncertainty_function_name: ${experiment.uncertainty}
+  use_likelihood: true
+  batch_size_uncertainty: 1000
+  contexts: ${experiment.contexts}

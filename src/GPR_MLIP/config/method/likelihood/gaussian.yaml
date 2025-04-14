@@ -1,0 +1,8 @@
+likelihood:
+  _target_: "gpytorch.likelihoods.GaussianLikelihood"
+  noise_constraint:
+    _target_: "gpytorch.constraints.GreaterThan"
+    lower_bound: 1.0e-12
+
+hyper_names:
+  - likelihood.noise_covar.noise

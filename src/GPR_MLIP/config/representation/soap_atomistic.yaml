@@ -1,0 +1,13 @@
+name: soap_atomistic
+
+function:
+  _target_: GPR_MLIP.representations.soap_reps.soap_atomistic
+  charges:
+    _target_: GPR_MLIP.data.load_charges_from_npz
+    npz_path: ${dataset.npz_path}
+    charges_key: ${dataset.charges_key}
+  r_cut: 5.0
+  n_max: 3
+  l_max: 1
+  ignore_h: false
+  _partial_: true

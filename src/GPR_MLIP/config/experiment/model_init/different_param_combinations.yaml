@@ -1,0 +1,16 @@
+defaults:
+  - hyper_inits: combinations
+
+
+params:
+  likelihood:
+    - ${method.likelihood.likelihood}
+  kernel:
+    - ${method.kernel.kernel}
+  fit_mode:
+  - train_hypers
+  hyper_inits: ${experiment.model_init.hyper_inits.params}
+  lr:
+    - ${method.method.lr}
+  n_steps:
+    - ${method.method.n_steps}

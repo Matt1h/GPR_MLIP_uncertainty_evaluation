@@ -1,0 +1,18 @@
+# @package _global_
+
+hydra:
+  run:
+    dir: ${result_dir}
+  job:
+    name: ${result_name}
+  sweep:
+    dir: ${result_dir}
+    subdir: ${hydra.job.num}
+  launcher:
+    partition: gpu
+    nodes: 1
+    gres: gpu:1
+    timeout_min: 4320
+    account: imacm_gpu
+    setup:
+      - module load 2021a CUDA/11.4.2

@@ -1,0 +1,6 @@
+[2024-09-25 08:01:52,640][__main__][INFO] - Running on host: gpu21003.pleiades.uni-wuppertal.de
+[2024-09-25 08:01:52,640][__main__][INFO] - Init trajectory.
+[2024-09-25 08:01:54,573][__main__][INFO] - Run experiment
+[2024-09-25 23:52:44,552][__main__][INFO] - Experiment run time: 57049.9785027504
+[2024-09-25 23:52:44,553][submitit][INFO] - Job completed successfully
+[2024-09-25 23:52:44,561][submitit][INFO] - Exiting after successful completion

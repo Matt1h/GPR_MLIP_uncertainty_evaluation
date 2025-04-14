@@ -1,0 +1,17 @@
+name: cross_validation
+
+defaults:
+  - model_init: different_param_combinations
+  - contexts: no_no_grad
+
+n_train: 1000
+
+function:
+  _target_: experiments.cross_validation.run_cross_validation
+  method: ${method.method}
+  possible_params: ${experiment.model_init.params}
+  contexts: ${experiment.contexts}
+  # n_cv_samples: ${experiment.n_cv_samples}
+  # remove_offset: true
+  seed: 42
+

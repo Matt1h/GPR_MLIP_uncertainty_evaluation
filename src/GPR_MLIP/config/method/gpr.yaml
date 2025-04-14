@@ -1,0 +1,14 @@
+name: GPR
+
+defaults:
+  - likelihood: gaussian
+  - kernel: rbf
+
+method:
+  _target_: "GPR_MLIP.models.model.GaussianProcessRegression"
+  likelihood: ${method.likelihood.likelihood}
+  kernel: ${method.kernel.kernel}
+  fit_mode: fixed_hypers
+  lr: 0.1
+  n_steps: 200
+  _partial_: true

@@ -1,0 +1,11 @@
+- experiment=candidate_based_al
+- experiment.uncertainty_function_name=absolute_error
+- method/kernel=atomistic_sum1
+- method.kernel.kernel.bs=1
+- representation=soap_atomistic
+- dataset.remove_offset=True
+- dataset.trajectory_type=rmd17
+- dataset.trajectory_name=full
+- dataset.function.property_=gs_energies
+- dataset.calculation_methods=[rmd17_energy]
+- result_name=combinations3_1000

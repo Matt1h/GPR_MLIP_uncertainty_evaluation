@@ -1,0 +1,6 @@
+- noise: 0.66
+  outputscale: 0.66
+  lengthscale: 0.66
+- noise: 10e-4
+  outputscale: 1.0
+  lengthscale: 1.0

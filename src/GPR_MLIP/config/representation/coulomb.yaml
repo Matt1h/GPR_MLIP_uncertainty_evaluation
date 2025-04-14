@@ -1,0 +1,9 @@
+name: coulomb
+
+function:
+  _target_: GPR_MLIP.representations.coulomb_reps.coulomb
+  charges:
+    _target_: GPR_MLIP.data.load_charges_from_npz
+    npz_path: ${dataset.npz_path}
+    charges_key: ${dataset.charges_key}
+  _partial_: true

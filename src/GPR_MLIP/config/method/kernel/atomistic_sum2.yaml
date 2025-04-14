@@ -1,0 +1,24 @@
+name: atomistic_sum2
+calc_representation: false
+
+kernel:
+  _target_: 'GPR_MLIP.models.kernel.AtomisticSumKernel2'
+  atomistic_kernel:
+    _target_: 'GPR_MLIP.utils.str2class'
+    class_path: gpytorch.kernels.RBFKernel
+  representation:
+    _target_: 'GPR_MLIP.utils.str2class'
+    class_path: ${representation.function}
+  representation_kwargs: ${representation.kwargs}
+  ard_num_dims:
+    _target_: "GPR_MLIP.data.get_ard_dim_from_npz"
+    npz_path: ${dataset.npz_path}
+    coordinates_key: ${dataset.coordinates_key}
+    representation_fn: ${representation.function}
+
+
+hyper_names:
+  _target_: "experiments.cross_validation.get_hyper_names_atomistic_sum_kernel2"
+  n_atoms:
+    _target_: "utils.get_n_atoms"
+    path: ${dataset.path}

@@ -1,0 +1,15 @@
+name: uncertainty_error_calculation
+
+defaults:
+  - model_init: load_state_dict
+  - contexts: no_fast_pred
+
+n_train: 1000
+
+function:
+  _target_: experiments.uncertainty_error_calculation.run_uncertainty_error_calculation
+  model: ${experiment.model_init.function}
+  contexts: ${experiment.contexts}
+  part: al
+  use_likelihood: true
+  batch_size_uncertainty: 1000

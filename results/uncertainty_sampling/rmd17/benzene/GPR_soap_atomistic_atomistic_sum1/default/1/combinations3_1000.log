@@ -1,0 +1,10 @@
+[2024-07-01 16:47:49,484][__main__][INFO] - Running on host: gpu21003.pleiades.uni-wuppertal.de
+[2024-07-01 16:47:49,484][__main__][INFO] - Init trajectory.
+[2024-07-01 16:47:51,334][__main__][INFO] - Run experiment
+[2024-07-04 16:45:30,005][submitit][WARNING] - Bypassing signal SIGCONT
+[2024-07-04 16:45:30,005][submitit][INFO] - Job has timed out. Ran 4318 minutes out of requested 4320 minutes.
+[2024-07-04 16:45:30,007][submitit][WARNING] - Caught signal SIGUSR2 on gpu21003.pleiades.uni-wuppertal.de: this job is timed-out.
+[2024-07-04 16:45:30,008][submitit][INFO] - Calling checkpoint method.
+[2024-07-04 16:45:30,034][submitit][INFO] - Job not requeued because: timed-out too many times.
+[2024-07-04 16:45:30,034][submitit][INFO] - Job completed successfully
+[2024-07-04 16:45:30,041][submitit][INFO] - Exiting after successful completion

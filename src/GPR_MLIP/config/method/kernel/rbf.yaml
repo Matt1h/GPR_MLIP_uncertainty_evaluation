@@ -1,0 +1,14 @@
+name: rbf
+calc_representation: true
+
+kernel:
+  _target_: "gpytorch.kernels.RBFKernel"
+  ard_num_dims:
+    _target_: "GPR_MLIP.data.get_ard_dim_from_npz"
+    npz_path: ${dataset.npz_path}
+    coordinates_key: ${dataset.coordinates_key}
+    representation_fn: ${representation.function}
+
+hyper_names:
+  - covar_module.outputscale
+  - covar_module.base_kernel.lengthscale

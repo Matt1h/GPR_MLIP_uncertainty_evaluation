@@ -24,6 +24,10 @@ Before running experiments, the data has to be stored appropriately. To run the 
   - Download the `.npz` files for the individual molecules from [WS22 on Zenodo](https://zenodo.org/records/7032334).
   - Create a directory `WS22` inside the `datasets` directory and place all `.npz` files there, i.e., `datasets/WS22/*.npz`.
 
+- For the **Porphyrin** dataset:
+  - Download the `.npz` file from [WS22 on Zenodo](https://zenodo.org/records/15206611).
+  - Create a directory `dftb` inside the `datasets` directory and place the `.npz` file there, i.e., `datasets/dftb/porphyrin.npz`.
+
 If your datasets are stored in different locations, or if you want to use other datasets, you can specify the dataset paths by overriding the corresponding Hydra configurations.
 
 
